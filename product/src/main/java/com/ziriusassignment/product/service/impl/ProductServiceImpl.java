@@ -1,5 +1,6 @@
 package com.ziriusassignment.product.service.impl;
 
+import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,21 +30,24 @@ public class ProductServiceImpl implements ProductService {
     ReviewGroupDto reviewGroupDto = productReviewService.addReviewGroup();
     Product product = ProductMapper.toProduct(productRequest);
     product.setReviewGroup(reviewGroupDto.getId());
-    return ProductMapper.toProductDto(productRepository.save(product));
+    return ProductMapper.toProductDto(productRepository.save(product), new ReviewGroupDto());
   }
 
   @Override
   public ProductDto updateProduct(ProductRequest productRequest) {
-    return ProductMapper.toProductDto(productRepository.save(ProductMapper.toProduct(productRequest)));
+    return ProductMapper.toProductDto(productRepository.save(ProductMapper.toProduct(productRequest)), new ReviewGroupDto());
   }
 
   @Override
   public ProductDto getProduct(Long productId) {
-    Optional<Product> product = productRepository.findById(productId);
-    if(product.isEmpty()) {
+    Optional<Product> productOptional = productRepository.findById(productId);
+    if(productOptional.isEmpty()) {
       throw new RuntimeException();
     }
-    return ProductMapper.toProductDto(product.get());
+    Product product = productOptional.get();
+    ReviewGroupDto ratings = productReviewService.getAverageRating(product.getReviewGroup());
+    
+    return ProductMapper.toProductDto(product, ratings);
   }
 
   @Override

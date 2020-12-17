@@ -32,4 +32,7 @@ public interface ProductReviewService {
       , @RequestParam Integer size
       , @RequestParam(defaultValue = "") String sortBy);
 
+  @GetMapping("/reviewgroups/{reviewGroupId}/averagerating")
+  public ReviewGroupDto getAverageRating(@PathVariable Long reviewGroupId);
+
 }

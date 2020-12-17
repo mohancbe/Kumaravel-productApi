@@ -40,6 +40,11 @@ public class ReviewGroupController {
 		return reviewGroupService.getReviewGroup(reviewGroupId);
 	}
 	
+	@GetMapping("/{reviewGroupId}/averagerating")
+  public ReviewGroupDto getAverageRating(@PathVariable Long reviewGroupId) {
+	  return reviewGroupService.getReviewGroup(reviewGroupId);
+	}
+	
   @PostMapping("/{reviewGroupId}/reviews")
   public ReviewDto addReview(@PathVariable Long reviewGroupId
       , @RequestBody ReviewRequest reviewRequest) {

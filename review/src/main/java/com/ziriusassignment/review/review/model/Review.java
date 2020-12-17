@@ -13,7 +13,7 @@ import lombok.ToString;
 public class Review {
 
   @Id
-  @GeneratedValue(strategy = GenerationType.AUTO)
+  @GeneratedValue(strategy = GenerationType.SEQUENCE)
   private Long id;
 
   private Integer rate;

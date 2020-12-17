@@ -12,7 +12,7 @@ import javax.persistence.OneToMany;
 public class ReviewGroup {
 
   @Id
-  @GeneratedValue(strategy = GenerationType.AUTO)
+  @GeneratedValue(strategy = GenerationType.SEQUENCE)
   private Long id;
 
   @OneToMany(mappedBy = "reviewGroup")
