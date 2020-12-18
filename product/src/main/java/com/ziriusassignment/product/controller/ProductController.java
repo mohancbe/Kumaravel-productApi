@@ -1,6 +1,7 @@
 package com.ziriusassignment.product.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -23,6 +24,7 @@ public class ProductController {
   private ProductService productService;
 
   @PostMapping("")
+  @PreAuthorize("hasRole('ROLE_PRODUCT')")
   public ProductDto addProducts(@RequestBody ProductRequest productRequest) {
     return productService.addProduct(productRequest);
   }
@@ -33,11 +35,13 @@ public class ProductController {
   }
 
   @PatchMapping("/{productId}")
+  @PreAuthorize("hasRole('ROLE_PRODUCT')")
   public ProductDto updateProducts(@RequestBody ProductRequest productRequest) {
     return productService.updateProduct(productRequest);
   }
 
   @PostMapping("/{productId}/reviews")
+  @PreAuthorize("hasRole('ROLE_USER')")
   public ReviewDto addProductReview(@PathVariable Long productId
       , @RequestBody ReviewRequest productRequest) {
     return productService.addReview(productId, productRequest);

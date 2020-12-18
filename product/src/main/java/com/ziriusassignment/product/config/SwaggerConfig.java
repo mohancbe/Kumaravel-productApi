@@ -1,4 +1,4 @@
-package com.ziriusassignment.review.review.config;
+package com.ziriusassignment.product.config;
 
 import java.util.Arrays;
 import java.util.Collections;
@@ -24,7 +24,7 @@ public class SwaggerConfig {
         .paths(PathSelectors.any()).build().securitySchemes(Collections.singletonList(apiKey()))
         .securityContexts(Collections.singletonList(securityContext()));
   }
-  
+
   private ApiKey apiKey() {
     return new ApiKey("Authorization", "Authorization", "header");
   }
