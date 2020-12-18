@@ -12,6 +12,7 @@ import org.springframework.stereotype.Service;
 import com.ziriusassignment.review.review.dto.ReviewDto;
 import com.ziriusassignment.review.review.dto.mapper.ReviewMapper;
 import com.ziriusassignment.review.review.dto.request.ReviewRequest;
+import com.ziriusassignment.review.review.exception.ReviewGroupNotFoundException;
 import com.ziriusassignment.review.review.model.Review;
 import com.ziriusassignment.review.review.model.ReviewGroup;
 import com.ziriusassignment.review.review.repository.ReviewGroupRepository;
@@ -23,17 +24,17 @@ public class ReviewServiceImpl implements ReviewService {
 
   @Autowired
   private ReviewRepository reviewRepository;
-  
+
   @Autowired
   private ReviewGroupRepository reviewGroupRepository;
-  
+
   @Override
   public ReviewDto addReview(Long reviewGroupId, ReviewRequest reviewRequest) {
     Optional<ReviewGroup> reviewGroup = reviewGroupRepository.findById(reviewGroupId);
-    if(reviewGroup.isEmpty()) {
-      throw new RuntimeException();
+    if (reviewGroup.isEmpty()) {
+      throw new ReviewGroupNotFoundException("Review group id: " + reviewGroupId + " is not found");
     }
-    
+
     Review review = new Review();
     review.setComment(reviewRequest.getComment());
     review.setRate(reviewRequest.getRate());
@@ -43,19 +44,16 @@ public class ReviewServiceImpl implements ReviewService {
 
   @Override
   public List<ReviewDto> getReviews(Long reviewGroupId, Pageable pageable) {
-    
+
     Optional<ReviewGroup> reviewGroup = reviewGroupRepository.findById(reviewGroupId);
-    if(reviewGroup.isEmpty()) {
-      throw new RuntimeException();
+    if (reviewGroup.isEmpty()) {
+      throw new ReviewGroupNotFoundException("Review group id: " + reviewGroupId + " is not found");
     }
-    
+
     Page<Review> reviews = reviewRepository.findByReviewGroupId(reviewGroupId, pageable);
     return reviews.get()
-      .map(review-> new ReviewDto()
-        .setId(review.getId())
-        .setRate(review.getRate())
-        .setComment(review.getComment()))
-      .collect(Collectors.toList());
+        .map(review -> new ReviewDto().setId(review.getId()).setRate(review.getRate()).setComment(review.getComment()))
+        .collect(Collectors.toList());
   }
 
 }

@@ -6,6 +6,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -21,53 +23,75 @@ import com.ziriusassignment.review.review.dto.request.ReviewRequest;
 import com.ziriusassignment.review.review.service.ReviewGroupService;
 import com.ziriusassignment.review.review.service.ReviewService;
 
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.ApiParam;
+
 @RestController
 @RequestMapping("/reviewgroups")
+@Api(value = "Review Groups", tags = "Review Groups", description = "Using this section, You can add "
+    + "reviews under specific review group. You can also create review group. To access most of "
+    + "the APIs, you need JWT token.")
 public class ReviewGroupController {
-	
+
   @Autowired
   ReviewGroupService reviewGroupService;
-  
+
   @Autowired
   ReviewService reviewService;
-  
-	@PostMapping("")
-	@PreAuthorize("hasRole('ROLE_PRODUCT')")
-	public ReviewGroupDto addReviewGroup() {
-		return reviewGroupService.addReviewGroup();
-	}
-	
-	@GetMapping("/{reviewGroupId}")
-	public ReviewGroupDto getReviewGroup(@PathVariable Long reviewGroupId) {
-		return reviewGroupService.getReviewGroup(reviewGroupId);
-	}
-	
-	@GetMapping("/{reviewGroupId}/averagerating")
-  public ReviewGroupDto getAverageRating(@PathVariable Long reviewGroupId) {
-	  return reviewGroupService.getReviewGroup(reviewGroupId);
-	}
-	
+
+  @PostMapping("")
+  @PreAuthorize("hasRole('ROLE_PRODUCT')")
+  @ApiOperation(value = "Using this API, you can add new review group.", notes = "Using this API, you can add new review group.", nickname = "addReviewGroup")
+  public ResponseEntity<ReviewGroupDto> addReviewGroup(
+      @ApiParam(value = "Review Group Notes", required = true) @RequestParam String reviewGroupNotes) {
+    return new ResponseEntity<ReviewGroupDto>(reviewGroupService.addReviewGroup(reviewGroupNotes), HttpStatus.CREATED);
+  }
+
+  @GetMapping("/{reviewGroupId}")
+  @ApiOperation(value = "Using this API, you can retrive the review group.", notes = "Using this API, you can retrive the review group.", nickname = "getReviewGroup")
+  public ReviewGroupDto getReviewGroup(
+      @ApiParam(value = "Review Group Identifier", required = true) @PathVariable Long reviewGroupId) {
+    return reviewGroupService.getReviewGroup(reviewGroupId);
+  }
+
+  @GetMapping("/{reviewGroupId}/averagerating")
+  @ApiOperation(value = "Using this API, you can retrive the average rating of the review group.", notes = "Using this API, you can retrive the average rating of the review group.", nickname = "getAverageRating")
+  public ReviewGroupDto getAverageRating(
+      @ApiParam(value = "Review Group Identifier", required = true) @PathVariable Long reviewGroupId) {
+    return reviewGroupService.getReviewGroup(reviewGroupId);
+  }
+
   @PostMapping("/{reviewGroupId}/reviews")
   @PreAuthorize("hasRole('ROLE_USER')")
-  public ReviewDto addReview(@PathVariable Long reviewGroupId
-      , @RequestBody ReviewRequest reviewRequest) {
-    return reviewService.addReview(reviewGroupId, reviewRequest);
+  @ApiOperation(value = "Using this API, you can add reviews specific to a review group.",
+  notes = "Using this API, you can add reviews specific to a review group.", 
+  nickname = "addReview")
+  public ResponseEntity<ReviewDto> addReview(
+      @ApiParam(value = "Review Group Identifier", required = true)
+      @PathVariable Long reviewGroupId, 
+      @ApiParam(value = "Review Request", required = true)
+      @RequestBody ReviewRequest reviewRequest) {
+    return new ResponseEntity<ReviewDto>(reviewService.addReview(reviewGroupId, reviewRequest), HttpStatus.CREATED);
   }
 
   @GetMapping("/{reviewGroupId}/reviews")
-  public List<ReviewDto> getReviews(@PathVariable Long reviewGroupId
-      , @RequestParam Integer page
-      , @RequestParam Integer size
-      , @RequestParam(defaultValue = "") String sortBy) {
-    
+  @ApiOperation(value = "Using this API, you can retrive the reviews specific to a review group.", notes = "Using this API, you can retrive the reviews specific to a review group.", nickname = "addReview")
+  public List<ReviewDto> getReviews(
+      @ApiParam(value = "Review Group Identifier", required = true) @PathVariable Long reviewGroupId,
+      @ApiParam(value = "Page starts with 0", required = true) @RequestParam(defaultValue = "0") Integer page,
+      @ApiParam(value = "Number of reviews to be retrived for each page", required = true) @RequestParam(defaultValue = "10") Integer size,
+      @ApiParam(value = "Optional. Sort by. eg: `rate,asc` to sort by rate param in acending order."
+          + "`rate,desc` to sort the rate param in decending order", required = false) @RequestParam(required = false, defaultValue = "") String sortBy) {
+
     Pageable pageable;
-    if(!sortBy.equals("")) {
+    if (!("").equals(sortBy)) {
       String[] sortArr = sortBy.split(",");
-      
+
       String sortParam = sortArr[0];
       String sortValue = sortArr[1];
-      
-      if("desc".equals(sortValue)) {
+
+      if ("desc".equals(sortValue)) {
         pageable = PageRequest.of(page, size, Sort.by(sortParam).descending());
       } else {
         pageable = PageRequest.of(page, size, Sort.by(sortParam).ascending());

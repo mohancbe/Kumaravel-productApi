@@ -18,7 +18,8 @@ import com.ziriusassignment.product.dto.request.ReviewRequest;
 public interface ProductReviewService {
 
   @PostMapping("/reviewgroups")
-  public ReviewGroupDto addReviewGroup(@RequestHeader("Authorization") String jwtToken);
+  public ReviewGroupDto addReviewGroup(@RequestHeader("Authorization") String jwtToken
+      , @RequestParam String notes);
   
   @GetMapping("/reviewgroups/{reviewGroupId}")
   public ReviewGroupDto getReviewGroup(@PathVariable Long reviewGroupId);

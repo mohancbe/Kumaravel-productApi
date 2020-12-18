@@ -4,7 +4,7 @@ import com.ziriusassignment.review.review.dto.ReviewGroupDto;
 
 public interface ReviewGroupService {
 
-  ReviewGroupDto addReviewGroup();
+  ReviewGroupDto addReviewGroup(String reviewGroupNotes);
 
   ReviewGroupDto getReviewGroup(Long reviewGroupId);
 

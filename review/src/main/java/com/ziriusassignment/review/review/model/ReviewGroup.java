@@ -8,40 +8,25 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
 
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+
+@Getter
+@Setter
 @Entity
+@AllArgsConstructor
+@NoArgsConstructor
 public class ReviewGroup {
 
   @Id
   @GeneratedValue(strategy = GenerationType.SEQUENCE)
   private Long id;
 
+  private String notes;
+
   @OneToMany(mappedBy = "reviewGroup")
   private List<Review> reviews;
-
-  public ReviewGroup() {
-
-  }
-
-  public ReviewGroup(Long id, List<Review> reviews) {
-    super();
-    this.id = id;
-    this.reviews = reviews;
-  }
-
-  public Long getId() {
-    return id;
-  }
-
-  public void setId(Long id) {
-    this.id = id;
-  }
-
-  public List<Review> getReviews() {
-    return reviews;
-  }
-
-  public void setReviews(List<Review> reviews) {
-    this.reviews = reviews;
-  }
 
 }

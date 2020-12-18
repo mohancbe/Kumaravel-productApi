@@ -13,7 +13,8 @@ public class ReviewGroupMapper {
   public static ReviewGroupDto toReviewGroupDto(ReviewGroup reviewGroup, Float averageRating) {
     List<ReviewDto> reviewDto;
     ReviewGroupDto reviewGroupDto = new ReviewGroupDto().setId(reviewGroup.getId())
-      .setAverageRating(averageRating);
+      .setAverageRating(averageRating)
+      .setNotes(reviewGroup.getNotes());
     
     if(reviewGroup.getReviews() != null) {
       reviewDto = new ArrayList<ReviewDto>(

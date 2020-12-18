@@ -7,6 +7,7 @@ import org.springframework.stereotype.Service;
 
 import com.ziriusassignment.review.review.dto.ReviewGroupDto;
 import com.ziriusassignment.review.review.dto.mapper.ReviewGroupMapper;
+import com.ziriusassignment.review.review.exception.ReviewGroupNotFoundException;
 import com.ziriusassignment.review.review.model.ReviewGroup;
 import com.ziriusassignment.review.review.repository.ReviewGroupRepository;
 import com.ziriusassignment.review.review.service.ReviewGroupService;
@@ -16,18 +17,19 @@ public class ReviewGroupServiceImpl implements ReviewGroupService {
 
   @Autowired
   private ReviewGroupRepository reviewGroupRepository;
-  
+
   @Override
-  public ReviewGroupDto addReviewGroup() {
-    ReviewGroup reviewGroup = reviewGroupRepository.save(new ReviewGroup());
-    return ReviewGroupMapper.toReviewGroupDto(reviewGroup, 0F);
+  public ReviewGroupDto addReviewGroup(String reviewGroupNotes) {
+    ReviewGroup reviewGroup = new ReviewGroup();
+    reviewGroup.setNotes(reviewGroupNotes);
+    return ReviewGroupMapper.toReviewGroupDto(reviewGroupRepository.save(reviewGroup), 0F);
   }
 
   @Override
   public ReviewGroupDto getReviewGroup(Long reviewGroupId) {
     Optional<ReviewGroup> reviewGroup = reviewGroupRepository.findById(reviewGroupId);
     if (reviewGroup.isEmpty()) {
-      throw new RuntimeException();
+      throw new ReviewGroupNotFoundException("Review group id: " + reviewGroupId + " is not found");
     }
     Float averageRating = reviewGroupRepository.getAverageRating(reviewGroupId);
     return ReviewGroupMapper.toReviewGroupDto(reviewGroup.get(), averageRating);

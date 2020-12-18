@@ -19,6 +19,7 @@ import lombok.experimental.Accessors;
 @JsonInclude(Include.NON_NULL)
 public class ReviewGroupDto {
   private Long id;
+  private String notes;
   private List<ReviewDto> reviews;
   private Float averageRating;
 }

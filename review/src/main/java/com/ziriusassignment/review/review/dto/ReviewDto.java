@@ -18,6 +18,7 @@ import lombok.experimental.Accessors;
 public class ReviewDto {
 
   private Long id;
+  private String notes;
   private Integer rate;
   private String comment;
   private ReviewGroupDto reviewGroup;
