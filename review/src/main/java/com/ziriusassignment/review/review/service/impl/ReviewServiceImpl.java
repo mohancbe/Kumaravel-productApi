@@ -1,6 +1,5 @@
 package com.ziriusassignment.review.review.service.impl;
 
-import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
@@ -12,6 +11,7 @@ import org.springframework.stereotype.Service;
 import com.ziriusassignment.review.review.dto.ReviewDto;
 import com.ziriusassignment.review.review.dto.mapper.ReviewMapper;
 import com.ziriusassignment.review.review.dto.request.ReviewRequest;
+import com.ziriusassignment.review.review.dto.response.ReviewResponse;
 import com.ziriusassignment.review.review.exception.ReviewGroupNotFoundException;
 import com.ziriusassignment.review.review.model.Review;
 import com.ziriusassignment.review.review.model.ReviewGroup;
@@ -43,7 +43,7 @@ public class ReviewServiceImpl implements ReviewService {
   }
 
   @Override
-  public List<ReviewDto> getReviews(Long reviewGroupId, Pageable pageable) {
+  public ReviewResponse getReviews(Long reviewGroupId, Pageable pageable) {
 
     Optional<ReviewGroup> reviewGroup = reviewGroupRepository.findById(reviewGroupId);
     if (reviewGroup.isEmpty()) {
@@ -51,9 +51,19 @@ public class ReviewServiceImpl implements ReviewService {
     }
 
     Page<Review> reviews = reviewRepository.findByReviewGroupId(reviewGroupId, pageable);
-    return reviews.get()
+    
+    ReviewResponse reviewResponse = new ReviewResponse();
+    reviewResponse.setPage(pageable.getPageNumber());
+    reviewResponse.setSize(pageable.getPageSize());
+    reviewResponse.setTotalPages(reviews.getTotalPages());
+    reviewResponse.setTotalRecords(reviews.getTotalElements());
+    reviewResponse.setReviews(
+        reviews.get()
         .map(review -> new ReviewDto().setId(review.getId()).setRate(review.getRate()).setComment(review.getComment()))
-        .collect(Collectors.toList());
+        .collect(Collectors.toList())
+    );
+    
+    return reviewResponse;
   }
 
 }

@@ -1,7 +1,5 @@
 package com.ziriusassignment.review.review.controller;
 
-import java.util.List;
-
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,6 +20,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.ziriusassignment.review.review.dto.ReviewDto;
 import com.ziriusassignment.review.review.dto.ReviewGroupDto;
 import com.ziriusassignment.review.review.dto.request.ReviewRequest;
+import com.ziriusassignment.review.review.dto.response.ReviewResponse;
 import com.ziriusassignment.review.review.service.ReviewGroupService;
 import com.ziriusassignment.review.review.service.ReviewService;
 
@@ -46,8 +45,7 @@ public class ReviewGroupController {
   @PreAuthorize("hasRole('ROLE_PRODUCT')")
   @ApiOperation(value = "Using this API, you can add new review group.", notes = "Using this API, you can add new review group.", nickname = "addReviewGroup")
   public ResponseEntity<ReviewGroupDto> addReviewGroup(
-      @ApiParam(value = "Review Group Notes", required = true) 
-      @RequestParam(name = "notes") String reviewGroupNotes) {
+      @ApiParam(value = "Review Group Notes", required = true) @RequestParam(name = "notes") String reviewGroupNotes) {
     return new ResponseEntity<ReviewGroupDto>(reviewGroupService.addReviewGroup(reviewGroupNotes), HttpStatus.CREATED);
   }
 
@@ -67,21 +65,19 @@ public class ReviewGroupController {
 
   @PostMapping("/{reviewGroupId}/reviews")
   @PreAuthorize("hasRole('ROLE_USER')")
-  @ApiOperation(value = "Using this API, you can add reviews specific to a review group.",
-  notes = "Using this API, you can add reviews specific to a review group.", 
-  nickname = "addReview")
+  @ApiOperation(value = "Using this API, you can add reviews specific to a review group.", notes = "Using this API, you can add reviews specific to a review group.", nickname = "addReview")
   public ResponseEntity<ReviewDto> addReview(
-      @ApiParam(value = "Review Group Identifier", required = true)
-      @PathVariable Long reviewGroupId, 
-      @ApiParam(value = "Review Request", required = true)
-      @Valid @RequestBody ReviewRequest reviewRequest) {
+      @ApiParam(value = "Review Group Identifier", required = true) @PathVariable Long reviewGroupId,
+      @ApiParam(value = "Review Request", required = true) @Valid @RequestBody ReviewRequest reviewRequest) {
     return new ResponseEntity<ReviewDto>(reviewService.addReview(reviewGroupId, reviewRequest), HttpStatus.CREATED);
   }
 
   @GetMapping("/{reviewGroupId}/reviews")
   @ApiOperation(value = "Using this API, you can retrive the reviews specific to a review group.", notes = "Using this API, you can retrive the reviews specific to a review group.", nickname = "addReview")
-  public List<ReviewDto> getReviews(
-      @ApiParam(value = "Review Group Identifier", required = true) @PathVariable Long reviewGroupId,
+  public ReviewResponse getReviews(
+      @ApiParam(value = "Review Group Identifier", required = true) 
+      @PathVariable Long reviewGroupId,
+      
       @ApiParam(value = "Page starts with 0", required = true) @RequestParam(defaultValue = "0") Integer page,
       @ApiParam(value = "Number of reviews to be retrived for each page", required = true) @RequestParam(defaultValue = "10") Integer size,
       @ApiParam(value = "Optional. Sort by. eg: `rate,asc` to sort by rate param in acending order."

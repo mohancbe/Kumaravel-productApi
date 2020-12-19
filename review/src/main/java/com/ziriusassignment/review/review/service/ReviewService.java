@@ -1,16 +1,15 @@
 package com.ziriusassignment.review.review.service;
 
-import java.util.List;
-
 import org.springframework.data.domain.Pageable;
 
 import com.ziriusassignment.review.review.dto.ReviewDto;
 import com.ziriusassignment.review.review.dto.request.ReviewRequest;
+import com.ziriusassignment.review.review.dto.response.ReviewResponse;
 
 public interface ReviewService {
 
   ReviewDto addReview(Long reviewGroupId, ReviewRequest reviewRequest);
 
-  List<ReviewDto> getReviews(Long reviewGroupId, Pageable pageable);
+  ReviewResponse getReviews(Long reviewGroupId, Pageable pageable);
 
 }
