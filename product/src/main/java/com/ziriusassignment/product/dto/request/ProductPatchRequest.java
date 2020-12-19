@@ -4,7 +4,6 @@ import java.math.BigDecimal;
 import java.util.List;
 
 import javax.validation.constraints.Min;
-import javax.validation.constraints.NotNull;
 
 import io.swagger.annotations.ApiModelProperty;
 import lombok.AllArgsConstructor;
@@ -18,18 +17,16 @@ import lombok.experimental.Accessors;
 @Accessors(chain = true)
 @AllArgsConstructor
 @NoArgsConstructor
-public class ProductRequest {
+public class ProductPatchRequest {
 
-  @ApiModelProperty(example = "POCO M2 (Pitch Black, 64 GB)  (6 GB RAM)", required = true)
-  @NotNull(message = "name is required field")
+  @ApiModelProperty(example = "POCO M2 (Pitch-Black, 64 GB)  (6-GB RAM)", required = true)
   private String name;
 
-  @ApiModelProperty(example = "9999", required = true)
+  @ApiModelProperty(example = "9998", required = true)
   @Min(value = 0, message = "price cannot be negative")
-  @NotNull(message = "price is required field")
   private BigDecimal price;
 
-  @ApiModelProperty(example = "12999", required = false)
+  @ApiModelProperty(example = "12998", required = false)
   @Min(value = 0, message = "orignalPrice cannot be negative")
   private BigDecimal orignalPrice;
 
@@ -37,20 +34,18 @@ public class ProductRequest {
       + "are alternative images")
   private List<String> images;
 
-  @ApiModelProperty(example = "INR", required = true)
-  @NotNull(message = "currency is required field")
+  @ApiModelProperty(example = "INR-Indian", required = true)
   private String currency;
 
-  @ApiModelProperty(example = "tyle, performance, and innovation - the Poco M2 brings together "
+  @ApiModelProperty(example = "Style, performance, and innovation - the Poco M2 brings together "
       + "all these aspects with its 16.58 cm (6.53) FHD+ 1080p Full Screen Display, MediaTek Helio "
       + "G80 Octa-core processor, a quad-camera setup, and an 8 MP selfie camera. ", required = true)
-  @NotNull(message = "description is required field")
   private String description;
 
-  @ApiModelProperty(example = "Mobiles", required = true)
-  @NotNull(message = "type is required field")
+  @ApiModelProperty(example = "Mobile", required = true)
   private String type;
-  @ApiModelProperty(example = "1 Year for Handset, 6 Months for Accessories", required = false)
+
+  @ApiModelProperty(example = "2 Year for Handset, 1 Year for Accessories", required = false)
   private String warranty;
 
 }

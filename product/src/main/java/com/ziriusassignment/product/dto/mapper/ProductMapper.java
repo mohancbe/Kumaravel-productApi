@@ -2,6 +2,7 @@ package com.ziriusassignment.product.dto.mapper;
 
 import com.ziriusassignment.product.dto.ProductDto;
 import com.ziriusassignment.product.dto.ReviewGroupDto;
+import com.ziriusassignment.product.dto.request.ProductPatchRequest;
 import com.ziriusassignment.product.dto.request.ProductRequest;
 import com.ziriusassignment.product.model.Product;
 
@@ -33,6 +34,34 @@ public class ProductMapper {
     product.setCurrency(productRequest.getCurrency());
     product.setDescription(productRequest.getDescription());
     return product;
+  }
+
+  public static Product patchProduct(Product toBePatched, ProductPatchRequest onlyPatch) {
+    if (onlyPatch.getName() != null) {
+      toBePatched.setName(onlyPatch.getName());
+    }
+    if (onlyPatch.getOrignalPrice() != null) {
+      toBePatched.setOrignalPrice(onlyPatch.getOrignalPrice());
+    }
+    if (onlyPatch.getImages() != null) {
+      toBePatched.setImages(onlyPatch.getImages());
+    }
+    if (onlyPatch.getType() != null) {
+      toBePatched.setType(onlyPatch.getType());
+    }
+    if (onlyPatch.getWarranty() != null) {
+      toBePatched.setWarranty(onlyPatch.getWarranty());
+    }
+    if (onlyPatch.getPrice() != null) {
+      toBePatched.setPrice(onlyPatch.getPrice());
+    }
+    if (onlyPatch.getCurrency() != null) {
+      toBePatched.setCurrency(onlyPatch.getCurrency());
+    }
+    if (onlyPatch.getDescription() != null) {
+      toBePatched.setDescription(onlyPatch.getDescription());
+    }
+    return toBePatched;
   }
 
 }

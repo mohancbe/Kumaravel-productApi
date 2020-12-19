@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.ziriusassignment.product.dto.ProductDto;
 import com.ziriusassignment.product.dto.ReviewDto;
+import com.ziriusassignment.product.dto.request.ProductPatchRequest;
 import com.ziriusassignment.product.dto.request.ProductRequest;
 import com.ziriusassignment.product.dto.request.ReviewRequest;
 import com.ziriusassignment.product.dto.response.ReviewResponse;
@@ -60,8 +61,9 @@ public class ProductController {
   notes = "Using this API, you can update the product.", nickname = "updateProducts")
   public ProductDto updateProducts(
       @ApiParam(value = "Product details", required = true)
-      @RequestBody ProductRequest productRequest) {
-    return productService.updateProduct(productRequest);
+      @RequestBody ProductPatchRequest productPatchRequest,
+      @PathVariable Long productId) {
+    return productService.updateProduct(productId, productPatchRequest);
   }
 
   @PostMapping("/{productId}/reviews")

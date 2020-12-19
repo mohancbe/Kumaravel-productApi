@@ -12,6 +12,7 @@ import com.ziriusassignment.product.dto.ProductDto;
 import com.ziriusassignment.product.dto.ReviewDto;
 import com.ziriusassignment.product.dto.ReviewGroupDto;
 import com.ziriusassignment.product.dto.mapper.ProductMapper;
+import com.ziriusassignment.product.dto.request.ProductPatchRequest;
 import com.ziriusassignment.product.dto.request.ProductRequest;
 import com.ziriusassignment.product.dto.request.ReviewRequest;
 import com.ziriusassignment.product.dto.response.ReviewResponse;
@@ -42,8 +43,13 @@ public class ProductServiceImpl implements ProductService {
   }
 
   @Override
-  public ProductDto updateProduct(ProductRequest productRequest) {
-    return ProductMapper.toProductDto(productRepository.save(ProductMapper.toProduct(productRequest)),
+  public ProductDto updateProduct(Long productId, ProductPatchRequest productRequest) {
+    Optional<Product> productOptional = productRepository.findById(productId);
+    if (productOptional.isEmpty()) {
+      throw new ProductNotFoundException("Product id: " + productId + " is not found");
+    }
+    return ProductMapper.toProductDto(
+        productRepository.save(ProductMapper.patchProduct(productOptional.get(), productRequest)),
         new ReviewGroupDto());
   }
 
