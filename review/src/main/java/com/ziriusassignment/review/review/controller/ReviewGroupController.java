@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.ziriusassignment.review.review.config.SwaggerConfig;
 import com.ziriusassignment.review.review.dto.ReviewDto;
 import com.ziriusassignment.review.review.dto.ReviewGroupDto;
 import com.ziriusassignment.review.review.dto.request.ReviewRequest;
@@ -30,9 +31,7 @@ import io.swagger.annotations.ApiParam;
 
 @RestController
 @RequestMapping("/reviewgroups")
-@Api(value = "Review Groups", tags = "Review Groups", description = "Using this section, You can add "
-    + "reviews under specific review group. You can also create review group. To access most of "
-    + "the APIs, you need JWT token.")
+@Api(tags = { SwaggerConfig.REVIEW_GROUPS_TAG })
 public class ReviewGroupController {
 
   @Autowired
@@ -46,7 +45,7 @@ public class ReviewGroupController {
   @ApiOperation(value = "Using this API, you can add new review group.", notes = "Using this API, you can add new review group.", nickname = "addReviewGroup")
   public ResponseEntity<ReviewGroupDto> addReviewGroup(
       @ApiParam(value = "Review Group Notes", required = true) @RequestParam(name = "notes") String reviewGroupNotes) {
-    return new ResponseEntity<ReviewGroupDto>(reviewGroupService.addReviewGroup(reviewGroupNotes), HttpStatus.CREATED);
+    return new ResponseEntity<>(reviewGroupService.addReviewGroup(reviewGroupNotes), HttpStatus.CREATED);
   }
 
   @GetMapping("/{reviewGroupId}")
@@ -69,15 +68,14 @@ public class ReviewGroupController {
   public ResponseEntity<ReviewDto> addReview(
       @ApiParam(value = "Review Group Identifier", required = true) @PathVariable Long reviewGroupId,
       @ApiParam(value = "Review Request", required = true) @Valid @RequestBody ReviewRequest reviewRequest) {
-    return new ResponseEntity<ReviewDto>(reviewService.addReview(reviewGroupId, reviewRequest), HttpStatus.CREATED);
+    return new ResponseEntity<>(reviewService.addReview(reviewGroupId, reviewRequest), HttpStatus.CREATED);
   }
 
   @GetMapping("/{reviewGroupId}/reviews")
   @ApiOperation(value = "Using this API, you can retrive the reviews specific to a review group.", notes = "Using this API, you can retrive the reviews specific to a review group.", nickname = "addReview")
   public ReviewResponse getReviews(
-      @ApiParam(value = "Review Group Identifier", required = true) 
-      @PathVariable Long reviewGroupId,
-      
+      @ApiParam(value = "Review Group Identifier", required = true) @PathVariable Long reviewGroupId,
+
       @ApiParam(value = "Page starts with 0", required = true) @RequestParam(defaultValue = "0") Integer page,
       @ApiParam(value = "Number of reviews to be retrived for each page", required = true) @RequestParam(defaultValue = "10") Integer size,
       @ApiParam(value = "Optional. Sort by. eg: `rate,asc` to sort by rate param in acending order."

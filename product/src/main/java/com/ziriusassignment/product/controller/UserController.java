@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.ziriusassignment.product.config.SwaggerConfig;
 import com.ziriusassignment.product.exception.InvalidCredentialsException;
 import com.ziriusassignment.product.security.JwtTokenProvider;
 import com.ziriusassignment.product.security.MyUserDetails;
@@ -19,8 +20,7 @@ import io.swagger.annotations.ApiParam;
 
 @RestController
 @RequestMapping("/users")
-@Api(value = "JWT Tokens", tags = "JWT Tokens", description =  "Using this section you can "
-    + "obtain JWT token to access the Product and Review APIs")
+@Api(tags = { SwaggerConfig.JWT_TAG })
 public class UserController {
 
   @Autowired
@@ -42,8 +42,9 @@ public class UserController {
     try {
       authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(username, password));
       return "Bearer "
-          + jwtTokenProvider.createToken(username, MyUserDetails.findByUsername(username).get().getRoles());
-    } catch (AuthenticationException e) {
+          + jwtTokenProvider.createToken(username, MyUserDetails.findByUsername(username)
+              .orElseThrow(() -> new InvalidCredentialsException("")).getRoles());
+    } catch (AuthenticationException | InvalidCredentialsException e) {
       throw new InvalidCredentialsException("Invalid username or password");
     }
   }

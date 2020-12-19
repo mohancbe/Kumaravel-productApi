@@ -1,7 +1,5 @@
 package com.ziriusassignment.review.review.service.impl;
 
-import java.util.Optional;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -27,12 +25,10 @@ public class ReviewGroupServiceImpl implements ReviewGroupService {
 
   @Override
   public ReviewGroupDto getReviewGroup(Long reviewGroupId) {
-    Optional<ReviewGroup> reviewGroup = reviewGroupRepository.findById(reviewGroupId);
-    if (reviewGroup.isEmpty()) {
-      throw new ReviewGroupNotFoundException("Review group id: " + reviewGroupId + " is not found");
-    }
+    ReviewGroup reviewGroup = reviewGroupRepository.findById(reviewGroupId)
+        .orElseThrow(() -> new ReviewGroupNotFoundException("Review group id: " + reviewGroupId + " is not found"));
     Float averageRating = reviewGroupRepository.getAverageRating(reviewGroupId);
-    return ReviewGroupMapper.toReviewGroupDto(reviewGroup.get(), averageRating);
+    return ReviewGroupMapper.toReviewGroupDto(reviewGroup, averageRating);
   }
 
 }

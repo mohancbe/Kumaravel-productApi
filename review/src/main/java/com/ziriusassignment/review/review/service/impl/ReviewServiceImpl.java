@@ -1,6 +1,5 @@
 package com.ziriusassignment.review.review.service.impl;
 
-import java.util.Optional;
 import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -30,44 +29,37 @@ public class ReviewServiceImpl implements ReviewService {
 
   @Override
   public ReviewDto addReview(Long reviewGroupId, ReviewRequest reviewRequest) {
-    Optional<ReviewGroup> reviewGroup = reviewGroupRepository.findById(reviewGroupId);
-    if (reviewGroup.isEmpty()) {
-      throw new ReviewGroupNotFoundException("Review group id: " + reviewGroupId + " is not found");
-    }
-
+    ReviewGroup reviewGroup = reviewGroupRepository.findById(reviewGroupId)
+        .orElseThrow(() -> new ReviewGroupNotFoundException("Review group id: " + reviewGroupId + " is not found"));
     Review review = new Review();
     review.setComment(reviewRequest.getComment());
     review.setRate(reviewRequest.getRate());
-    review.setReviewGroup(reviewGroup.get());
+    review.setReviewGroup(reviewGroup);
     return ReviewMapper.toReviewDto(reviewRepository.save(review));
   }
 
   @Override
   public ReviewResponse getReviews(Long reviewGroupId, Pageable pageable) {
 
-    Optional<ReviewGroup> reviewGroup = reviewGroupRepository.findById(reviewGroupId);
-    if (reviewGroup.isEmpty()) {
-      throw new ReviewGroupNotFoundException("Review group id: " + reviewGroupId + " is not found");
-    }
+    reviewGroupRepository.findById(reviewGroupId)
+        .orElseThrow(() -> new ReviewGroupNotFoundException("Review group id: " + reviewGroupId + " is not found"));
 
     Page<Review> reviews = reviewRepository.findByReviewGroupId(reviewGroupId, pageable);
-    
+
     ReviewResponse reviewResponse = new ReviewResponse();
     reviewResponse.setPage(pageable.getPageNumber());
     reviewResponse.setSize(pageable.getPageSize());
     reviewResponse.setTotalPages(reviews.getTotalPages());
     reviewResponse.setTotalRecords(reviews.getTotalElements());
-    reviewResponse.setReviews(
-        reviews.get()//
+    reviewResponse.setReviews(reviews.get()//
         .map(review -> new ReviewDto()//
             .setId(review.getId())//
             .setRate(review.getRate())//
             .setComment(review.getComment())//
             .setCreatedDate(review.getCreatedDate())//
             .setModifiedDate(review.getModifiedDate()))//
-        .collect(Collectors.toList())
-    );
-    
+        .collect(Collectors.toList()));
+
     return reviewResponse;
   }
 

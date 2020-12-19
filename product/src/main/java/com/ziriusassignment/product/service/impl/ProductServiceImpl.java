@@ -1,8 +1,5 @@
 package com.ziriusassignment.product.service.impl;
 
-import java.util.Optional;
-
-import javax.persistence.EntityNotFoundException;
 import javax.servlet.http.HttpServletRequest;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -33,6 +30,8 @@ public class ProductServiceImpl implements ProductService {
   @Autowired
   HttpServletRequest request;
 
+  private static final String PRODUCT_NOT_FOUND_MESSAGE = "Product id is not found : ";
+  
   @Override
   public ProductDto addProduct(ProductRequest productRequest) {
     ReviewGroupDto reviewGroupDto = productReviewService.addReviewGroup(request.getHeader("Authorization"),
@@ -44,22 +43,16 @@ public class ProductServiceImpl implements ProductService {
 
   @Override
   public ProductDto updateProduct(Long productId, ProductPatchRequest productRequest) {
-    Optional<Product> productOptional = productRepository.findById(productId);
-    if (productOptional.isEmpty()) {
-      throw new ProductNotFoundException("Product id: " + productId + " is not found");
-    }
-    return ProductMapper.toProductDto(
-        productRepository.save(ProductMapper.patchProduct(productOptional.get(), productRequest)),
+    Product product = productRepository.findById(productId)
+        .orElseThrow(() -> new ProductNotFoundException(PRODUCT_NOT_FOUND_MESSAGE + productId));
+    return ProductMapper.toProductDto(productRepository.save(ProductMapper.patchProduct(product, productRequest)),
         new ReviewGroupDto());
   }
 
   @Override
   public ProductDto getProduct(Long productId) {
-    Optional<Product> productOptional = productRepository.findById(productId);
-    if (productOptional.isEmpty()) {
-      throw new ProductNotFoundException("Product id: " + productId + " is not found");
-    }
-    Product product = productOptional.get();
+    Product product = productRepository.findById(productId)
+        .orElseThrow(() -> new ProductNotFoundException(PRODUCT_NOT_FOUND_MESSAGE + productId));
     ReviewGroupDto reviewGroup = productReviewService.getAverageRating(product.getReviewGroup());
     ReviewResponse reviews = productReviewService.getReviews(product.getReviewGroup(), 0, 5, "");
     reviewGroup.setReview(reviews);
@@ -69,21 +62,16 @@ public class ProductServiceImpl implements ProductService {
 
   @Override
   public ReviewDto addReview(Long productId, ReviewRequest reviewRequest) {
-    Optional<Product> product = productRepository.findById(productId);
-    if (product.isEmpty()) {
-      throw new EntityNotFoundException("Product id: " + productId + " is not found");
-    }
-    return productReviewService.addReview(request.getHeader("Authorization"), product.get().getReviewGroup(),
-        reviewRequest);
+    Product product = productRepository.findById(productId)
+        .orElseThrow(() -> new ProductNotFoundException(PRODUCT_NOT_FOUND_MESSAGE + productId));
+    return productReviewService.addReview(request.getHeader("Authorization"), product.getReviewGroup(), reviewRequest);
   }
 
   @Override
   public ReviewResponse getReviews(Long productId, Integer page, Integer size, String sortBy) {
-    Optional<Product> productOptional = productRepository.findById(productId);
-    if (productOptional.isEmpty()) {
-      throw new ProductNotFoundException("Product id: " + productId + " is not found");
-    }
-    return productReviewService.getReviews(productOptional.get().getReviewGroup(), page, size, sortBy);
+    Product product = productRepository.findById(productId)
+        .orElseThrow(() -> new ProductNotFoundException(PRODUCT_NOT_FOUND_MESSAGE + productId));
+    return productReviewService.getReviews(product.getReviewGroup(), page, size, sortBy);
   }
 
 }

@@ -46,7 +46,7 @@ public class ExceptionHandlerController extends ResponseEntityExceptionHandler {
         errorMessage.append(error.getDefaultMessage()).append(";");
     }
     ErrorDetails error = new ErrorDetails(new Date(), "Bad Request", errorMessage.toString());
-    return new ResponseEntity<Object>(error, HttpStatus.BAD_REQUEST);
+    return new ResponseEntity<>(error, HttpStatus.BAD_REQUEST);
   }
 
   @ExceptionHandler(Exception.class)

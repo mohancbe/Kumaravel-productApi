@@ -15,12 +15,18 @@ import springfox.documentation.service.ApiKey;
 import springfox.documentation.service.AuthorizationScope;
 import springfox.documentation.service.Contact;
 import springfox.documentation.service.SecurityReference;
+import springfox.documentation.service.Tag;
 import springfox.documentation.spi.DocumentationType;
 import springfox.documentation.spi.service.contexts.SecurityContext;
 import springfox.documentation.spring.web.plugins.Docket;
 
 @Configuration
 public class SwaggerConfig {
+
+  private static final String AUTHORIZATION = "Authorization";
+
+  public static final String REVIEW_GROUPS_TAG = "Review Groups";
+
   @Bean
   public Docket api() {
     return new Docket(DocumentationType.SWAGGER_2)//
@@ -28,6 +34,10 @@ public class SwaggerConfig {
         .apis(RequestHandlerSelectors.basePackage("com.ziriusassignment"))//
         .paths(PathSelectors.any())//
         .build()//
+        .tags(new Tag(REVIEW_GROUPS_TAG,
+            "Using this section, You can add "
+                + "reviews under specific review group. You can also create review group. To access most of "
+                + "the APIs, you need JWT token."))
         .apiInfo(metadata())//
         .securitySchemes(Collections.singletonList(apiKey()))//
         .securityContexts(Collections.singletonList(securityContext()));
@@ -36,8 +46,7 @@ public class SwaggerConfig {
   private ApiInfo metadata() {
     return new ApiInfoBuilder()//
         .title("Review Microservice API")//
-        .description(
-            "Using this Reviews APIs, you can add reviews under specific review group "
+        .description("Using this Reviews APIs, you can add reviews under specific review group "
             + "You can also create review group. To access most of the APIs, you need JWT"
             + "token. Once you have obtained the token, you should click on the "
             + "right top button `Authorize` and provide the token.")//
@@ -48,17 +57,21 @@ public class SwaggerConfig {
   }
 
   private ApiKey apiKey() {
-    return new ApiKey("Authorization", "Authorization", "header");
+    return new ApiKey(AUTHORIZATION, AUTHORIZATION, "header");
   }
 
+  @SuppressWarnings("deprecation")
   private SecurityContext securityContext() {
-    return SecurityContext.builder().securityReferences(defaultAuth()).forPaths(PathSelectors.any()).build();
+    return SecurityContext.builder()
+        .securityReferences(defaultAuth())
+        .forPaths(PathSelectors.any())
+        .build();
   }
 
   private List<SecurityReference> defaultAuth() {
     AuthorizationScope authorizationScope = new AuthorizationScope("global", "accessEverything");
     AuthorizationScope[] authorizationScopes = new AuthorizationScope[1];
     authorizationScopes[0] = authorizationScope;
-    return Arrays.asList(new SecurityReference("Authorization", authorizationScopes));
+    return Arrays.asList(new SecurityReference(AUTHORIZATION, authorizationScopes));
   }
 }

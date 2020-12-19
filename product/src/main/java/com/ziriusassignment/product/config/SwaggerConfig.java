@@ -15,12 +15,19 @@ import springfox.documentation.service.ApiKey;
 import springfox.documentation.service.AuthorizationScope;
 import springfox.documentation.service.Contact;
 import springfox.documentation.service.SecurityReference;
+import springfox.documentation.service.Tag;
 import springfox.documentation.spi.DocumentationType;
 import springfox.documentation.spi.service.contexts.SecurityContext;
 import springfox.documentation.spring.web.plugins.Docket;
 
 @Configuration
 public class SwaggerConfig {
+
+  private static final String AUTHORIZATION = "Authorization";
+
+  public static final String PRODUCT_TAG = "Products";
+  public static final String JWT_TAG = "JWT Tokens";
+
   @Bean
   public Docket api() {
     return new Docket(DocumentationType.SWAGGER_2)//
@@ -28,6 +35,10 @@ public class SwaggerConfig {
         .apis(RequestHandlerSelectors.basePackage("com.ziriusassignment"))//
         .paths(PathSelectors.any())//
         .build()//
+        .tags(new Tag(PRODUCT_TAG,
+            "Using this product section APIs, you can create, update, and get products. "
+                + "Reviews also can able to add for products."))
+        .tags(new Tag(JWT_TAG, "Using this section you can obtain JWT token to access the Product and Review APIs"))
         .apiInfo(metadata())//
         .securitySchemes(Collections.singletonList(apiKey()))//
         .securityContexts(Collections.singletonList(securityContext()));
@@ -45,21 +56,23 @@ public class SwaggerConfig {
         .contact(new Contact(null, null, "kumar.okm1995@gmail.com"))//
         .build();
   }
-  
+
   private ApiKey apiKey() {
-    return new ApiKey("Authorization", "Authorization", "header");
+    return new ApiKey(AUTHORIZATION, AUTHORIZATION, "header");
   }
-  
+
+  @SuppressWarnings("deprecation")
   private SecurityContext securityContext() {
     return SecurityContext.builder()//
         .securityReferences(defaultAuth())//
-        .forPaths(PathSelectors.any()).build();
+        .forPaths(PathSelectors.any())
+        .build();
   }
 
   private List<SecurityReference> defaultAuth() {
     AuthorizationScope authorizationScope = new AuthorizationScope("global", "accessEverything");
     AuthorizationScope[] authorizationScopes = new AuthorizationScope[1];
     authorizationScopes[0] = authorizationScope;
-    return Arrays.asList(new SecurityReference("Authorization", authorizationScopes));
+    return Arrays.asList(new SecurityReference(AUTHORIZATION, authorizationScopes));
   }
 }

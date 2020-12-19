@@ -33,38 +33,28 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
     // Entry points
     http.authorizeRequests()//
-        //.antMatchers(HttpMethod.GET, "/reviewgroups/**").permitAll()
-        .antMatchers(HttpMethod.GET, "/reviewgroups/**/**").permitAll()
-        .antMatchers("/h2-console/**/**").permitAll()
+        .antMatchers(HttpMethod.GET, "/reviewgroups/**/**").permitAll().antMatchers("/h2-console/**/**").permitAll()
         // Disallow everything else..
         .anyRequest().authenticated();
 
-    // If a user try to access a resource without having enough permissions
     http.exceptionHandling().accessDeniedPage("/login");
 
-    // Apply JWT
     http.apply(new JwtTokenFilterConfigurer(jwtTokenProvider));
 
-    // Optional, if you want to test the API from a browser
-    // http.httpBasic();
   }
 
   @Override
   public void configure(WebSecurity web) throws Exception {
-    // Allow swagger to be accessed without authentication
     web.ignoring().antMatchers("/v2/api-docs")//
         .antMatchers("/swagger-resources/**")//
         .antMatchers("/swagger-ui.html")//
-        .antMatchers("/swagger-ui")
-        .antMatchers("/swagger-ui/**")
-        .antMatchers("/configuration/**")//
+        .antMatchers("/swagger-ui").antMatchers("/swagger-ui/**").antMatchers("/configuration/**")//
         .antMatchers("/webjars/**")//
         .antMatchers("/public")
-        
-        // Un-secure H2 Database (for testing purposes, H2 console shouldn't be unprotected in production)
-        .and()
-        .ignoring()
-        .antMatchers("/h2-console/**/**");;
+
+        // Un-secure H2 Database (for testing purposes, H2 console shouldn't be
+        // unprotected in production)
+        .and().ignoring().antMatchers("/h2-console/**/**");
   }
 
   @Bean

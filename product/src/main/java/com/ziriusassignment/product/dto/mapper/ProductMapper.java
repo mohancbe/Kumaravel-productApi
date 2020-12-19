@@ -8,6 +8,10 @@ import com.ziriusassignment.product.model.Product;
 
 public class ProductMapper {
 
+  private ProductMapper() {
+    //private constructor
+  }
+  
   public static ProductDto toProductDto(Product product, ReviewGroupDto ratings) {
     return new ProductDto().setId(product.getId())//
         .setName(product.getName())//

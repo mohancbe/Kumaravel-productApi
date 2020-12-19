@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.ziriusassignment.product.config.SwaggerConfig;
 import com.ziriusassignment.product.dto.ProductDto;
 import com.ziriusassignment.product.dto.ReviewDto;
 import com.ziriusassignment.product.dto.request.ProductPatchRequest;
@@ -29,8 +30,7 @@ import io.swagger.annotations.ApiParam;
 
 @RestController
 @RequestMapping("/products")
-@Api(value = "Products", tags = "Products", description =  "Using this product section APIs, "
-    + "you can create, update, and get products. Reviews also can able to add for products.")
+@Api(tags = { SwaggerConfig.PRODUCT_TAG })
 public class ProductController {
 
   @Autowired
@@ -43,7 +43,7 @@ public class ProductController {
   public ResponseEntity<ProductDto> addProducts(
       @ApiParam(value = "Product details", required = true)
       @Valid @RequestBody ProductRequest productRequest) {
-    return new ResponseEntity<ProductDto>(productService.addProduct(productRequest), HttpStatus.CREATED);
+    return new ResponseEntity<>(productService.addProduct(productRequest), HttpStatus.CREATED);
   }
 
   @GetMapping("/{productId}")
