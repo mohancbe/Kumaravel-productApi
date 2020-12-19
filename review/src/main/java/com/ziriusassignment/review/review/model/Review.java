@@ -1,5 +1,7 @@
 package com.ziriusassignment.review.review.model;
 
+import java.util.Date;
+
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -8,6 +10,8 @@ import javax.persistence.ManyToOne;
 import javax.validation.constraints.Max;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
+
+import org.springframework.data.annotation.CreatedDate;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -34,5 +38,8 @@ public class Review {
 
   @ManyToOne
   private ReviewGroup reviewGroup;
+  
+  @CreatedDate
+  private Date createdAt;
 
 }

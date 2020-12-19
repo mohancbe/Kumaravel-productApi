@@ -12,12 +12,14 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.ziriusassignment.product.dto.ProductDto;
 import com.ziriusassignment.product.dto.ReviewDto;
 import com.ziriusassignment.product.dto.request.ProductRequest;
 import com.ziriusassignment.product.dto.request.ReviewRequest;
+import com.ziriusassignment.product.dto.response.ReviewResponse;
 import com.ziriusassignment.product.service.ProductService;
 
 import io.swagger.annotations.Api;
@@ -74,5 +76,17 @@ public class ProductController {
       @Valid @RequestBody ReviewRequest productRequest) {
     return productService.addReview(productId, productRequest);
   }
-
+  
+  @GetMapping("/{productId}/reviews")
+  @ApiOperation(value = "Using this API, you can retrive the reviews specific to a product.", notes = "Using this API, you can retrive the reviews specific to a review group.", nickname = "addReview")
+  public ReviewResponse getReviews(
+      @ApiParam(value = "Product Identifier", required = true) 
+      @PathVariable Long productId,
+      
+      @ApiParam(value = "Page starts with 0", required = true) @RequestParam(defaultValue = "0") Integer page,
+      @ApiParam(value = "Number of reviews to be retrived for each page", required = true) @RequestParam(defaultValue = "10") Integer size,
+      @ApiParam(value = "Optional. Sort by. eg: `rate,asc` to sort by rate param in acending order."
+          + "`rate,desc` to sort the rate param in decending order", required = false) @RequestParam(required = false, defaultValue = "") String sortBy) {
+    return productService.getReviews(productId, page, size, sortBy);
+  }
 }

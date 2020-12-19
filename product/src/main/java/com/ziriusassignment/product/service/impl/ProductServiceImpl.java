@@ -14,6 +14,7 @@ import com.ziriusassignment.product.dto.ReviewGroupDto;
 import com.ziriusassignment.product.dto.mapper.ProductMapper;
 import com.ziriusassignment.product.dto.request.ProductRequest;
 import com.ziriusassignment.product.dto.request.ReviewRequest;
+import com.ziriusassignment.product.dto.response.ReviewResponse;
 import com.ziriusassignment.product.exception.ProductNotFoundException;
 import com.ziriusassignment.product.model.Product;
 import com.ziriusassignment.product.repository.ProductRepository;
@@ -53,9 +54,11 @@ public class ProductServiceImpl implements ProductService {
       throw new ProductNotFoundException("Product id: " + productId + " is not found");
     }
     Product product = productOptional.get();
-    ReviewGroupDto ratings = productReviewService.getAverageRating(product.getReviewGroup());
+    ReviewGroupDto reviewGroup = productReviewService.getAverageRating(product.getReviewGroup());
+    ReviewResponse reviews = productReviewService.getReviews(product.getReviewGroup(), 0, 5, "");
+    reviewGroup.setReview(reviews);
 
-    return ProductMapper.toProductDto(product, ratings);
+    return ProductMapper.toProductDto(product, reviewGroup);
   }
 
   @Override
@@ -66,6 +69,15 @@ public class ProductServiceImpl implements ProductService {
     }
     return productReviewService.addReview(request.getHeader("Authorization"), product.get().getReviewGroup(),
         reviewRequest);
+  }
+
+  @Override
+  public ReviewResponse getReviews(Long productId, Integer page, Integer size, String sortBy) {
+    Optional<Product> productOptional = productRepository.findById(productId);
+    if (productOptional.isEmpty()) {
+      throw new ProductNotFoundException("Product id: " + productId + " is not found");
+    }
+    return productReviewService.getReviews(productOptional.get().getReviewGroup(), page, size, sortBy);
   }
 
 }

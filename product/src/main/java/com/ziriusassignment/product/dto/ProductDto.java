@@ -23,6 +23,6 @@ public class ProductDto {
   private String description;
   private String type;
   private String warranty;
-  private ReviewGroupDto review;
+  private ReviewGroupDto reviewDetails;
 
 }

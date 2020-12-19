@@ -1,9 +1,8 @@
 package com.ziriusassignment.product.dto;
 
-import java.util.List;
-
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
+import com.ziriusassignment.product.dto.response.ReviewResponse;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -19,6 +18,6 @@ import lombok.experimental.Accessors;
 @JsonInclude(Include.NON_NULL)
 public class ReviewGroupDto {
   private Long id;
-  private List<ReviewDto> reviews;
   private Float averageRating;
+  private ReviewResponse review;
 }

@@ -1,7 +1,5 @@
 package com.ziriusassignment.review.review.dto;
 
-import java.util.List;
-
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
 
@@ -20,6 +18,5 @@ import lombok.experimental.Accessors;
 public class ReviewGroupDto {
   private Long id;
   private String notes;
-  private List<ReviewDto> reviews;
   private Float averageRating;
 }
