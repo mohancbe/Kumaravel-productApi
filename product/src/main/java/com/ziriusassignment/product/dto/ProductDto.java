@@ -2,6 +2,7 @@ package com.ziriusassignment.product.dto;
 
 import java.math.BigDecimal;
 import java.sql.Timestamp;
+import java.util.List;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -15,11 +16,12 @@ import lombok.experimental.Accessors;
 @AllArgsConstructor
 @NoArgsConstructor
 public class ProductDto {
-  
+
   private Long id;
   private String name;
   private BigDecimal price;
   private BigDecimal orignalPrice;
+  private List<String> images;
   private String currency;
   private String description;
   private String type;

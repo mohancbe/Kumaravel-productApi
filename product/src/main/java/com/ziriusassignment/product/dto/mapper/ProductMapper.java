@@ -11,6 +11,7 @@ public class ProductMapper {
     return new ProductDto().setId(product.getId())//
         .setName(product.getName())//
         .setOrignalPrice(product.getOrignalPrice())//
+        .setImages(product.getImages())//
         .setType(product.getType())//
         .setWarranty(product.getWarranty())//
         .setReviewDetails(ratings)//
@@ -25,6 +26,7 @@ public class ProductMapper {
     Product product = new Product();
     product.setName(productRequest.getName());
     product.setOrignalPrice(productRequest.getOrignalPrice());
+    product.setImages(productRequest.getImages());
     product.setType(productRequest.getType());
     product.setWarranty(productRequest.getWarranty());
     product.setPrice(productRequest.getPrice());

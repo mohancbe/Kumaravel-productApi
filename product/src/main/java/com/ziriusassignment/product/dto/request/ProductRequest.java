@@ -1,6 +1,7 @@
 package com.ziriusassignment.product.dto.request;
 
 import java.math.BigDecimal;
+import java.util.List;
 
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
@@ -31,10 +32,14 @@ public class ProductRequest {
   @Min(value = 0, message = "orignalPrice cannot be negative")
   private BigDecimal orignalPrice;
 
+  @ApiModelProperty(notes = "Product images. first image will be primary image and remaining "
+      + "are alternative images")
+  private List<String> images;
+
   @ApiModelProperty(example = "INR", required = true)
   @NotNull(message = "currency is required field")
   private String currency;
-  
+
   @ApiModelProperty(example = "tyle, performance, and innovation - the Poco M2 brings together "
       + "all these aspects with its 16.58 cm (6.53) FHD+ 1080p Full Screen Display, MediaTek Helio "
       + "G80 Octa-core processor, a quad-camera setup, and an 8 MP selfie camera. ", required = true)
