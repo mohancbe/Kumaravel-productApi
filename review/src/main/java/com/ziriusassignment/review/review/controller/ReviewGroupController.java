@@ -2,6 +2,8 @@ package com.ziriusassignment.review.review.controller;
 
 import java.util.List;
 
+import javax.validation.Valid;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -44,7 +46,8 @@ public class ReviewGroupController {
   @PreAuthorize("hasRole('ROLE_PRODUCT')")
   @ApiOperation(value = "Using this API, you can add new review group.", notes = "Using this API, you can add new review group.", nickname = "addReviewGroup")
   public ResponseEntity<ReviewGroupDto> addReviewGroup(
-      @ApiParam(value = "Review Group Notes", required = true) @RequestParam String reviewGroupNotes) {
+      @ApiParam(value = "Review Group Notes", required = true) 
+      @RequestParam(name = "notes") String reviewGroupNotes) {
     return new ResponseEntity<ReviewGroupDto>(reviewGroupService.addReviewGroup(reviewGroupNotes), HttpStatus.CREATED);
   }
 
@@ -71,7 +74,7 @@ public class ReviewGroupController {
       @ApiParam(value = "Review Group Identifier", required = true)
       @PathVariable Long reviewGroupId, 
       @ApiParam(value = "Review Request", required = true)
-      @RequestBody ReviewRequest reviewRequest) {
+      @Valid @RequestBody ReviewRequest reviewRequest) {
     return new ResponseEntity<ReviewDto>(reviewService.addReview(reviewGroupId, reviewRequest), HttpStatus.CREATED);
   }
 

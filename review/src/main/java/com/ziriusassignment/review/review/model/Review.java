@@ -5,6 +5,9 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
+import javax.validation.constraints.Max;
+import javax.validation.constraints.Min;
+import javax.validation.constraints.NotNull;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -22,6 +25,9 @@ public class Review {
   @GeneratedValue(strategy = GenerationType.SEQUENCE)
   private Long id;
 
+  @Min(value = 1, message = "Rating must be 1-5 scale")
+  @Max(value = 5, message = "Rating must be 1-5 scale")
+  @NotNull(message = "rate is required field")
   private Integer rate;
 
   private String comment;

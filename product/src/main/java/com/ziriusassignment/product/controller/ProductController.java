@@ -1,5 +1,7 @@
 package com.ziriusassignment.product.controller;
 
+import javax.validation.Valid;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -37,7 +39,7 @@ public class ProductController {
   notes = "Using this API, you can add the product.", nickname = "productRequest")
   public ResponseEntity<ProductDto> addProducts(
       @ApiParam(value = "Product details", required = true)
-      @RequestBody ProductRequest productRequest) {
+      @Valid @RequestBody ProductRequest productRequest) {
     return new ResponseEntity<ProductDto>(productService.addProduct(productRequest), HttpStatus.CREATED);
   }
 
@@ -69,7 +71,7 @@ public class ProductController {
       @PathVariable Long productId, 
       
       @ApiParam(value = "Review Request", required = true)
-      @RequestBody ReviewRequest productRequest) {
+      @Valid @RequestBody ReviewRequest productRequest) {
     return productService.addReview(productId, productRequest);
   }
 
