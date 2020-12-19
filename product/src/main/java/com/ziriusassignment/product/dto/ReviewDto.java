@@ -1,5 +1,7 @@
 package com.ziriusassignment.product.dto;
 
+import java.sql.Timestamp;
+
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
 
@@ -21,5 +23,7 @@ public class ReviewDto {
   private Integer rate;
   private String comment;
   private ReviewGroupDto reviewGroup;
+  private Timestamp modifiedDate;
+  private Timestamp createdDate;
 
 }

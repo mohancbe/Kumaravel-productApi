@@ -8,6 +8,8 @@ public class ReviewMapper {
     return new ReviewDto().setId(review.getId())
       .setId(review.getId())
       .setComment(review.getComment())
-      .setRate(review.getRate());
+      .setRate(review.getRate())
+      .setCreatedDate(review.getCreatedDate())
+      .setModifiedDate(review.getModifiedDate());
   }
 }

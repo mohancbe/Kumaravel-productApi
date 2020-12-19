@@ -58,8 +58,13 @@ public class ReviewServiceImpl implements ReviewService {
     reviewResponse.setTotalPages(reviews.getTotalPages());
     reviewResponse.setTotalRecords(reviews.getTotalElements());
     reviewResponse.setReviews(
-        reviews.get()
-        .map(review -> new ReviewDto().setId(review.getId()).setRate(review.getRate()).setComment(review.getComment()))
+        reviews.get()//
+        .map(review -> new ReviewDto()//
+            .setId(review.getId())//
+            .setRate(review.getRate())//
+            .setComment(review.getComment())//
+            .setCreatedDate(review.getCreatedDate())//
+            .setModifiedDate(review.getModifiedDate()))//
         .collect(Collectors.toList())
     );
     

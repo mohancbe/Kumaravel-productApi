@@ -1,6 +1,7 @@
 package com.ziriusassignment.product.dto;
 
 import java.math.BigDecimal;
+import java.sql.Timestamp;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -24,5 +25,7 @@ public class ProductDto {
   private String type;
   private String warranty;
   private ReviewGroupDto reviewDetails;
+  private Timestamp modifiedDate;
+  private Timestamp createdDate;
 
 }

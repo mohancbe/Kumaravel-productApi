@@ -1,12 +1,16 @@
 package com.ziriusassignment.product.model;
 
 import java.math.BigDecimal;
+import java.sql.Timestamp;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.validation.constraints.Min;
+
+import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.UpdateTimestamp;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -41,5 +45,11 @@ public class Product {
   private String warranty;
 
   private Long reviewGroup;
+  
+  @UpdateTimestamp
+  private Timestamp modifiedDate;
+  
+  @CreationTimestamp
+  private Timestamp createdDate;
 
 }

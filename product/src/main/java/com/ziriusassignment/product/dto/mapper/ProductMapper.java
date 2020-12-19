@@ -16,7 +16,9 @@ public class ProductMapper {
         .setReviewDetails(ratings)//
         .setPrice(product.getPrice())//
         .setCurrency(product.getCurrency())//
-        .setDescription(product.getDescription());//
+        .setDescription(product.getDescription())//
+        .setCreatedDate(product.getCreatedDate())//
+        .setModifiedDate(product.getModifiedDate());
   }
 
   public static Product toProduct(ProductRequest productRequest) {

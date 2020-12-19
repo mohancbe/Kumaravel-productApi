@@ -9,7 +9,9 @@ public class ReviewGroupMapper {
     ReviewGroupDto reviewGroupDto = new ReviewGroupDto()//
         .setId(reviewGroup.getId()).setAverageRating(averageRating)//
         .setNotes(reviewGroup.getNotes())//
-        .setNotes(reviewGroup.getNotes());
+        .setNotes(reviewGroup.getNotes())//
+        .setCreatedDate(reviewGroup.getCreatedDate())//
+        .setModifiedDate(reviewGroup.getModifiedDate());
     return reviewGroupDto;
   }
 }
