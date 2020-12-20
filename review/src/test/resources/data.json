@@ -1,16 +1,8 @@
 {
-  "createProduct1": {
-    "request": {
-      "currency": "INR",
-      "description": "tyle, performance, and innovation - the Poco M2 brings together all these aspects with its 16.58 cm (6.53) FHD+ 1080p Full Screen Display, MediaTek Helio G80 Octa-core processor, a quad-camera setup, and an 8 MP selfie camera.",
-      "images": [
-        "string"
-      ],
-      "name": "POCO M2 (Pitch Black, 64 GB)  (6 GB RAM)",
-      "orignalPrice": 12999,
-      "price": 9999,
-      "type": "Mobiles",
-      "warranty": "1 Year for Handset, 6 Months for Accessories"
-    }
-  }
+	"addReview": {
+		"request": {
+			"comment": "100% value for money....No doubt. Don't think about it.. just order it...simply awesome affordable 6gb phone.",
+			"rate": 5
+		}
+	}
 }
