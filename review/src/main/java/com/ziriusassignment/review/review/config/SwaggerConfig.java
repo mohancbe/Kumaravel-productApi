@@ -24,6 +24,7 @@ import springfox.documentation.spring.web.plugins.Docket;
 public class SwaggerConfig {
 
   private static final String AUTHORIZATION = "Authorization";
+  public static final String JWT_TAG = "JWT Tokens";
 
   public static final String REVIEW_GROUPS_TAG = "Review Groups";
 
@@ -38,6 +39,7 @@ public class SwaggerConfig {
             "Using this section, You can add "
                 + "reviews under specific review group. You can also create review group. To access most of "
                 + "the APIs, you need JWT token."))
+        .tags(new Tag(JWT_TAG, "Using this section you can obtain JWT token to access the Product and Review APIs"))
         .apiInfo(metadata())//
         .securitySchemes(Collections.singletonList(apiKey()))//
         .securityContexts(Collections.singletonList(securityContext()));
