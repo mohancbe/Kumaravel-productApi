@@ -37,4 +37,4 @@ JWT token can be generated from swagger.
 | ------------ | ------------ |
 | Create review group  | Product token required |
 | Add review | User token required  |
-| Get review group and Get review | User token required  |
+| Get review group and Get review | No token required  |
